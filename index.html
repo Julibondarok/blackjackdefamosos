@@ -4,12 +4,29 @@
     <meta charset="UTF-8">
     <title>Blackjack de Famosos</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 10px; background: #f4f4f9; }
-        .fila { display: flex; justify-content: center; gap: 5px; min-height: 90px; flex-wrap: wrap; }
-        .carta { border: 1px solid #aaa; padding: 5px; border-radius: 8px; width: 70px; background: white; text-align: center; font-size: 0.65em; }
-        .carta img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto 3px; }
+        body { font-family: sans-serif; text-
+
+align: center; padding: 10px; background: 
+
+#f4f4f9; }
+        .fila { display: flex; justify-
+
+content: center; gap: 5px; min-height: 90px; 
+
+flex-wrap: wrap; }
+        .carta { border: 1px solid #aaa; 
+
+padding: 5px; border-radius: 8px; width: 70px; 
+
+background: white; text-align: center; font-
+
+size: 0.65em; }
+        .carta img { width: 45px; height: 
+
+45px; object-fit: cover; border-radius: 50%; 
+
+display: block; margin: 0 auto 3px; }
         
-        /* Grid de 2 columnas fijo */
         #jugadores-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -18,90 +35,228 @@
             width: 95%; 
         }
         
-        .jugador-box { border: 2px solid #ddd; padding: 10px; border-radius: 10px; background: white; }
-        .turno { border-color: gold; background: #fffdf0; }
-        button { padding: 10px; cursor: pointer; margin: 3px; font-weight: bold; }
+        .jugador-box { border: 2px solid #ddd; 
+
+padding: 10px; border-radius: 10px; 
+
+background: white; }
+        .turno { border-color: gold; 
+
+background: #fffdf0; }
+        button { padding: 10px; cursor: 
+
+pointer; margin: 3px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <h1>Blackjack de Famosos</h1>
-    <button onclick="configurarJuego()">Jugadores</button>
-    <button onclick="generarBanca()">Generar Banca</button>
+    <button onclick="configurarJuego
+
+()">Jugadores</button>
+    <button onclick="generarBanca()">Generar 
+
+Banca</button>
     
     <h3>BANCA</h3>
-    <div id="banca-container" class="fila"></div>
-    <p>Objetivo: <span id="total-banca-txt">???</span></p>
+    <div id="banca-container" 
+
+class="fila"></div>
+    <p>Objetivo: <span id="total-banca-
+
+txt">???</span></p>
 
     <div id="jugadores-container"></div>
 
-    <div style="margin-top:20px; position: sticky; bottom: 0; background: #f4f4f9; padding: 10px;">
-        <button onclick="pedirCarta()">Pedir Carta</button>
-        <button onclick="plantarse()">Plantarse</button>
-        <button onclick="pasarTurno()">Pasar Turno</button>
-        <button onclick="revelarBancaYGanador()" style="background-color: gold;">Revelar Ganador</button>
+    <div style="margin-top:20px; position: 
+
+sticky; bottom: 0; background: #f4f4f9; 
+
+padding: 10px;">
+        <button onclick="pedirCarta()">Pedir 
+
+Carta</button>
+        <button onclick="plantarse
+
+()">Plantarse</button>
+        <button onclick="pasarTurno()">Pasar 
+
+Turno</button>
+        <button onclick="revelarBancaYGanador
+
+()" style="background-color: gold;">Revelar 
+
+Ganador</button>
     </div>
 
     <script>
-        const getImg = (n) => `https://tse1.mm.bing.net/th?q=${encodeURIComponent(n)}&w=100&h=100&c=7`;
-        const nombres = ["Messi", "Lali Esposito", "Duki", "Susana Gimenez", "Ricardo Darin", "Wanda Nara", "Bizarrap", "Rodolfo Barili", "Emilia Mernes", "Cazzu", "Dillom", "Carmen Barbieri", "Sebastian Wainraich", "Gimena Accardi", "Tini Stoessel", "Julian Alvarez", "Pedro Pascal", "Robert De Niro", "Bad Bunny", "Keanu Reeves", "Angelina Jolie", "Leonardo DiCaprio", "Dwayne Johnson", "Jennifer Aniston", "Taylor Swift", "Brad Pitt", "Dua Lipa", "Harry Styles", "Zendaya", "Margot Robbie"];
+        const getImg = (n) => 
+
+`https://tse1.mm.bing.net/th?q=
+
+${encodeURIComponent(n)}&w=100&h=100&c=7`;
+        const nombres = ["Messi", "Lali 
+
+Esposito", "Duki", "Susana Gimenez", "Ricardo 
+
+Darin", "Wanda Nara", "Bizarrap", "Rodolfo 
+
+Barili", "Emilia Mernes", "Cazzu", "Dillom", 
+
+"Carmen Barbieri", "Sebastian Wainraich", 
+
+"Gimena Accardi", "Tini Stoessel", "Julian 
+
+Alvarez", "Pedro Pascal", "Robert De Niro", 
+
+"Bad Bunny", "Keanu Reeves", "Angelina Jolie", 
+
+"Leonardo DiCaprio", "Dwayne Johnson", 
+
+"Jennifer Aniston", "Taylor Swift", "Brad 
+
+Pitt", "Dua Lipa", "Harry Styles", "Zendaya", 
+
+"Margot Robbie"];
         
-        let mazoTotal = nombres.map(n => ({ n: n, a: Math.floor(Math.random()*40)+20, img: getImg(n) }));
-        let mazo = [], banca = [], bancaTotal = 0, jugadores = [], turnoActual = 0;
+        let mazoTotal = nombres.map(n => ({ n: 
+
+n, a: Math.floor(Math.random()*40)+20, img: 
+
+getImg(n) }));
+        let mazo = [], banca = [], bancaTotal 
+
+= 0, jugadores = [], turnoActual = 0;
 
         function configurarJuego() {
-            mazo = [...mazoTotal].sort(() => Math.random() - 0.5);
-            let num = parseInt(prompt("Cantidad de jugadores:"));
+            mazo = [...mazoTotal].sort(() => 
+
+Math.random() - 0.5);
+            let num = parseInt(prompt
+
+("Cantidad de jugadores:"));
             if (!num || num < 1) return;
             jugadores = [];
-            for(let i=0; i<num; i++) jugadores.push({nombre: prompt("Jugador "+(i+1)), mano:[], total:0, plantado:false});
+            for(let i=0; i<num; i++) 
+
+jugadores.push({nombre: prompt("Jugador "+(i
+
++1)), mano:[], total:0, plantado:false});
             turnoActual = 0;
             renderizar();
         }
 
         function generarBanca() {
             banca = []; bancaTotal = 0;
-            for(let i=0; i<4; i++) { let f = mazo.pop(); banca.push(f); bancaTotal += f.a; }
-            document.getElementById("banca-container").innerHTML = banca.map(f => `<div class='carta'><img src='${f.img}'>${f.n}</div>`).join('');
-            document.getElementById("total-banca-txt").innerText = "???";
+            for(let i=0; i<4; i++) { let f = 
+
+mazo.pop(); banca.push(f); bancaTotal += f.a; 
+
+}
+            document.getElementById("banca-
+
+container").innerHTML = banca.map(f => `<div 
+
+class='carta'><img src='${f.img}'>${f.n}
+
+</div>`).join('');
+            document.getElementById("total-
+
+banca-txt").innerText = "???";
         }
 
         function renderizar() {
-            document.getElementById("jugadores-container").innerHTML = jugadores.map((j, i) => `
-                <div class='jugador-box ${i === turnoActual ? "turno" : ""}'>
-                    <h4>${j.nombre} ${j.plantado ? "(Plantado)" : ""}</h4>
-                    <div class='fila'>${j.mano.map(f => `<div class='carta'><img src='${f.img}'>${f.n}</div>`).join('')}</div>
+            document.getElementById
+
+("jugadores-container").innerHTML = 
+
+jugadores.map((j, i) => `
+                <div class='jugador-box ${i 
+
+=== turnoActual ? "turno" : ""}'>
+                    <h4>${j.nombre} 
+
+${j.plantado ? "(Plantado)" : ""}</h4>
+                    <div class='fila'>
+
+${j.mano.map(f => `<div class='carta'><img 
+
+src='${f.img}'>${f.n}</div>`).join('')}</div>
                 </div>`).join('');
         }
 
         function pedirCarta() {
-            if(jugadores.length === 0) return alert("Primero configure jugadores");
-            if(jugadores[turnoActual].plantado) return alert("Ya te plantaste");
+            if(jugadores.length === 0) return 
+
+alert("Primero configure jugadores");
+            if(jugadores
+
+[turnoActual].plantado) return alert("Ya te 
+
+plantaste");
             let f = mazo.pop();
-            jugadores[turnoActual].mano.push(f);
-            jugadores[turnoActual].total += f.a;
+            jugadores[turnoActual].mano.push
+
+(f);
+            jugadores[turnoActual].total += 
+
+f.a;
             renderizar();
         }
 
-        function plantarse() { if(jugadores.length > 0) jugadores[turnoActual].plantado = true; renderizar(); }
-        function pasarTurno() { if(turnoActual < jugadores.length-1) { turnoActual++; renderizar(); } }
+        function plantarse() { if
+
+(jugadores.length > 0) jugadores
+
+[turnoActual].plantado = true; renderizar(); }
+        function pasarTurno() { if(turnoActual 
+
+< jugadores.length-1) { turnoActual++; 
+
+renderizar(); } }
 
         function revelarBancaYGanador() {
-            document.getElementById("total-banca-txt").innerText = bancaTotal;
-            let msg = "RESULTADOS FINALES (Objetivo: " + bancaTotal + ")\n\n";
+            document.getElementById("total-
+
+banca-txt").innerText = bancaTotal;
+            let msg = "RESULTADOS FINALES 
+
+(Objetivo: " + bancaTotal + ")\n\n";
             
             jugadores.forEach(j => {
-                let status = (j.total === bancaTotal) ? " (¡BLACKJACK!)" : (j.total > bancaTotal) ? " (Se paso)" : " (" + j.total + ")";
-                msg += j.nombre + ": " + status + "\n";
+                let status = (j.total === 
+
+bancaTotal) ? " (Â¡BLACKJACK!)" : (j.total > 
+
+bancaTotal) ? " (Paso: " + j.total + ")" : " 
+
+(" + j.total + ")";
+                msg += j.nombre + ": " + 
+
+status + "\n";
             });
 
-            // Lógica de ganador mejorada: Filtra los que NO se pasaron
-            let validos = jugadores.filter(j => j.total <= bancaTotal);
+            let validos = jugadores.filter(j 
+
+=> j.total <= bancaTotal);
             if (validos.length > 0) {
-                let ganador = validos.reduce((p, c) => (p.total > c.total) ? p : c);
-                msg += "\nEL GANADOR ES: " + ganador.nombre + " con " + ganador.total;
+                let ganador = validos.reduce
+
+((p, c) => (p.total > c.total) ? p : c);
+                let tipoVictoria = 
+
+(ganador.total === bancaTotal) ? "con un 
+
+BLACKJACK" : "por aproximacion";
+                msg += "\nEL GANADOR ES: " + 
+
+ganador.nombre + " " + tipoVictoria + " (" + 
+
+ganador.total + ")";
             } else {
-                msg += "\nTodos se pasaron. ¡Gano la banca!";
+                msg += "\nTodos se pasaron. 
+
+Gano la banca.";
             }
             alert(msg);
         }
