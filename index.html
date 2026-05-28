@@ -27,9 +27,11 @@ body{
 
     color:white;
 
-    height:100vh;
+    min-height:100vh;
 
-    overflow:hidden;
+    overflow-y:auto;
+
+    overflow-x:hidden;
 }
 
 /* ---------- MESA ---------- */
@@ -37,7 +39,8 @@ body{
 .mesa{
 
     width:100vw;
-    height:100vh;
+
+    min-height:100vh;
 
     display:flex;
     flex-direction:column;
@@ -617,7 +620,7 @@ function cartaHTML(f,animar=false){
 
     <div class="carta ${animar ? "animar" : ""}">
 
-        <div class="valor">♥</div>
+        <div class="valor">♥️</div>
 
         <img src="${f.img}">
 
@@ -625,7 +628,7 @@ function cartaHTML(f,animar=false){
             ${f.n}
         </div>
 
-        <div class="valor bottom">♥</div>
+        <div class="valor bottom">♥️</div>
 
     </div>
 
