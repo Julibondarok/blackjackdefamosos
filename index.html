@@ -1,0 +1,792 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Blackjack de Famosos</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Trebuchet MS', sans-serif;
+
+    background:
+    radial-gradient(circle at center,
+    #0f6840 0%,
+    #08452a 55%,
+    #02170d 100%);
+
+    color:white;
+
+    min-height:100vh;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+}
+
+/* ---------- MESA ---------- */
+
+.mesa{
+
+    width:100vw;
+
+    min-height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    padding:14px 18px 82px;
+}
+
+/* ---------- BLOQUE SUPERIOR ---------- */
+
+.topo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:4px;
+}
+
+/* ---------- TITULO ---------- */
+
+h1{
+
+    text-align:center;
+
+    font-size:2.1rem;
+
+    color:#f7d774;
+
+    text-shadow:
+    0 0 10px rgba(255,215,0,.4),
+    0 0 20px rgba(0,0,0,.6);
+}
+
+h3{
+
+    text-align:center;
+
+    color:#f5d77f;
+
+    margin-bottom:4px;
+
+    font-size:1.05rem;
+}
+
+/* ---------- BOTONES ---------- */
+
+.top-buttons,
+.bottom-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+button{
+
+    border:none;
+
+    padding:10px 16px;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    font-size:.9rem;
+
+    cursor:pointer;
+
+    color:white;
+
+    transition:.2s;
+
+    letter-spacing:.4px;
+}
+
+.gold{
+
+    background:
+    linear-gradient(
+    145deg,
+    #fff3b0 0%,
+    #f5c542 20%,
+    #d89b12 50%,
+    #f7d774 75%,
+    #fff1a8 100%);
+
+    color:#222;
+
+    box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.5),
+    0 4px 10px rgba(0,0,0,.35);
+}
+
+.red{
+
+    background:
+    linear-gradient(
+    145deg,
+    #ff5b5b 0%,
+    #c91414 50%,
+    #7e0000 100%);
+
+    box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.25),
+    0 4px 10px rgba(0,0,0,.35);
+}
+
+button:hover{
+
+    transform:
+    translateY(-2px)
+    scale(1.03);
+}
+
+/* ---------- BANCA ---------- */
+
+.banca-section{
+
+    text-align:center;
+
+    margin-top:2px;
+
+    margin-bottom:4px;
+}
+
+/* ---------- FILAS ---------- */
+
+.fila{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+    min-height:118px;
+}
+
+/* ---------- CARTAS ---------- */
+
+.carta{
+
+    width:82px;
+    height:118px;
+
+    background:
+    linear-gradient(145deg,#ffffff,#ececec);
+
+    border-radius:14px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    color:#111;
+
+    border:2px solid rgba(255,255,255,.95);
+
+    box-shadow:
+    0 5px 12px rgba(0,0,0,.38),
+    inset 0 0 8px rgba(255,255,255,.7);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.carta::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:60%;
+    height:100%;
+
+    background:rgba(255,255,255,.25);
+
+    transform:skewX(-20deg);
+}
+
+/* SOLO NUEVA CARTA */
+
+.carta.animar{
+
+    animation:repartir .42s ease;
+}
+
+.carta.animar::before{
+
+    animation:brillo .6s ease;
+}
+
+@keyframes repartir{
+
+    0%{
+
+        transform:
+        translateY(-55px)
+        rotate(-10deg)
+        scale(.5);
+
+        opacity:0;
+    }
+
+    100%{
+
+        transform:
+        translateY(0)
+        rotate(0)
+        scale(1);
+
+        opacity:1;
+    }
+}
+
+@keyframes brillo{
+
+    0%{
+        left:-120%;
+    }
+
+    100%{
+        left:150%;
+    }
+}
+
+.carta img{
+
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid #d3a937;
+
+    margin-bottom:5px;
+}
+
+.nombre-carta{
+
+    font-size:.58rem;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    padding:0 4px;
+
+    line-height:1.1;
+}
+
+.valor{
+
+    position:absolute;
+
+    top:4px;
+    left:5px;
+
+    font-weight:bold;
+
+    font-size:.72rem;
+
+    color:#bb0000;
+}
+
+.valor.bottom{
+
+    top:auto;
+    left:auto;
+
+    bottom:4px;
+    right:5px;
+
+    transform:rotate(180deg);
+}
+
+/* ---------- JUGADORES ---------- */
+
+#jugadores-container{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,1fr));
+
+    gap:10px;
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:0 auto;
+}
+
+.jugador-box{
+
+    background:
+    linear-gradient(
+    180deg,
+    rgba(255,255,255,.08),
+    rgba(255,255,255,.03));
+
+    border:2px solid rgba(255,255,255,.15);
+
+    border-radius:14px;
+
+    padding:8px;
+
+    backdrop-filter:blur(5px);
+}
+
+.turno{
+
+    border-color:#f7d774;
+
+    box-shadow:
+    0 0 16px rgba(255,215,0,.35);
+}
+
+.jugador-box h4{
+
+    text-align:center;
+
+    margin-bottom:5px;
+
+    color:#ffe89a;
+
+    font-size:.92rem;
+}
+
+/* ---------- FOOTER ---------- */
+
+.bottom-buttons{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    z-index:999;
+
+    padding:8px;
+
+    background:
+    linear-gradient(
+    180deg,
+    rgba(0,0,0,0),
+    rgba(0,0,0,.7));
+
+    backdrop-filter:blur(5px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="mesa">
+
+<div class="topo">
+
+<h1>BLACKJACK DE FAMOSOS</h1>
+
+<div class="top-buttons">
+
+<button class="gold" onclick="configurarJuego()">
+Jugadores
+</button>
+
+<button class="red" onclick="generarBanca()">
+Generar Banca
+</button>
+
+</div>
+
+</div>
+
+<div class="banca-section">
+
+<h3>BANCA</h3>
+
+<div id="banca-container" class="fila"></div>
+
+<h3 style="margin-top:4px;">
+Objetivo:
+<span id="total-banca-txt">???</span>
+</h3>
+
+</div>
+
+<div id="jugadores-container"></div>
+
+<div class="bottom-buttons">
+
+<button class="red" onclick="pedirCarta()">
+Pedir Carta
+</button>
+
+<button class="gold" onclick="plantarse()">
+Plantarse
+</button>
+
+<button class="red" onclick="pasarTurno()">
+Pasar Turno
+</button>
+
+<button class="gold" onclick="revelarBancaYGanador()">
+Revelar Ganador
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const getImg = (n) =>
+`https://tse1.mm.bing.net/th?q=${encodeURIComponent(n)}&w=100&h=100&c=7`;
+
+/* ---------- FAMOSOS CON EDADES REALES 2026 ---------- */
+
+const famosos = [
+
+{ n:"Mirko", a:8 },
+{ n:"Milo J", a:19 },
+{ n:"Franco Colapinto", a:23 },
+{ n:"Nicki Nicole", a:25 },
+{ n:"Tini Stoessel", a:29 },
+{ n:"Juli Castro", a:28 },
+{ n:"Duki", a:30 },
+{ n:"Bizarrap", a:27 },
+{ n:"Emilia Mernes", a:29 },
+{ n:"Maria Becerra", a:26 },
+
+{ n:"Taylor Swift", a:36 },
+{ n:"Lionel Messi", a:38 },
+{ n:"Rodrigo De Paul", a:32 },
+{ n:"Lali Espósito", a:34 },
+{ n:"Wanda Nara", a:39 },
+
+{ n:"Pedro Pascal", a:51 },
+{ n:"Ricardo Darín", a:69 },
+{ n:"Guillermo Francella", a:71 },
+{ n:"Susana Giménez", a:82 },
+
+{ n:"Mirtha Legrand", a:99 },
+{ n:"Macaya Márquez", a:91 },
+
+{ n:"Morgan Freeman", a:89 },
+{ n:"Robert De Niro", a:82 },
+{ n:"Keanu Reeves", a:61 },
+{ n:"Brad Pitt", a:62 },
+
+{ n:"Zendaya", a:29 },
+{ n:"Bad Bunny", a:32 },
+{ n:"Dua Lipa", a:30 },
+{ n:"Harry Styles", a:32 },
+
+{ n:"Julian Alvarez", a:26 },
+{ n:"Cazzu", a:32 },
+{ n:"Mauro Icardi", a:33 },
+{ n:"Antonela Roccuzzo", a:38 },
+
+{ n:"Marley", a:56 },
+{ n:"Carmen Barbieri", a:71 },
+{ n:"Moria Casán", a:79 }
+
+];
+
+let mazoTotal = famosos.map(f => ({
+
+    n:f.n,
+
+    a:f.a,
+
+    img:getImg(f.n)
+
+}));
+
+let mazo = [];
+let banca = [];
+let bancaTotal = 0;
+let jugadores = [];
+let turnoActual = 0;
+
+/* ---------- CONFIG ---------- */
+
+function configurarJuego(){
+
+    mazo = [...mazoTotal]
+    .sort(() => Math.random() - 0.5);
+
+    let num =
+    parseInt(prompt("Cantidad de jugadores:"));
+
+    if(!num || num < 1) return;
+
+    jugadores = [];
+
+    for(let i=0; i<num; i++){
+
+        jugadores.push({
+
+            nombre:prompt("Jugador " + (i+1)),
+
+            mano:[],
+
+            total:0,
+
+            plantado:false,
+
+            ultima:false
+
+        });
+    }
+
+    turnoActual = 0;
+
+    renderizar();
+}
+
+/* ---------- BANCA ---------- */
+
+function generarBanca(){
+
+    banca = [];
+
+    bancaTotal = 0;
+
+    for(let i=0; i<4; i++){
+
+        let f = mazo.pop();
+
+        banca.push(f);
+
+        bancaTotal += f.a;
+    }
+
+    document.getElementById("banca-container")
+    .innerHTML =
+    banca.map(f => cartaHTML(f,false)).join('');
+
+    document.getElementById("total-banca-txt")
+    .innerText = "???";
+}
+
+/* ---------- CARTA HTML ---------- */
+
+function cartaHTML(f,animar=false){
+
+    return `
+
+    <div class="carta ${animar ? "animar" : ""}">
+
+        <div class="valor">♥️</div>
+
+        <img src="${f.img}">
+
+        <div class="nombre-carta">
+            ${f.n}
+        </div>
+
+        <div class="valor bottom">♥️</div>
+
+    </div>
+
+    `;
+}
+
+/* ---------- RENDER ---------- */
+
+function renderizar(){
+
+    document.getElementById("jugadores-container")
+    .innerHTML =
+
+    jugadores.map((j,i) => `
+
+        <div class="jugador-box ${i === turnoActual ? "turno" : ""}">
+
+            <h4>
+
+                ${j.nombre}
+
+                ${j.plantado ? " - Plantado" : ""}
+
+            </h4>
+
+            <div class="fila">
+
+                ${j.mano.map((f,index) =>
+
+                    cartaHTML(
+                        f,
+                        index === j.mano.length - 1
+                        && j.ultima === true
+                    )
+
+                ).join('')}
+
+            </div>
+
+        </div>
+
+    `).join('');
+
+    jugadores.forEach(j => {
+
+        j.ultima = false;
+    });
+}
+
+/* ---------- PEDIR ---------- */
+
+function pedirCarta(){
+
+    if(jugadores.length === 0){
+
+        return alert(
+        "Primero configure jugadores"
+        );
+    }
+
+    if(jugadores[turnoActual].plantado){
+
+        return alert(
+        "Ya te plantaste"
+        );
+    }
+
+    let f = mazo.pop();
+
+    jugadores[turnoActual].mano.push(f);
+
+    jugadores[turnoActual].total += f.a;
+
+    jugadores[turnoActual].ultima = true;
+
+    renderizar();
+}
+
+/* ---------- PLANTARSE ---------- */
+
+function plantarse(){
+
+    jugadores[turnoActual].plantado = true;
+
+    renderizar();
+}
+
+/* ---------- PASAR ---------- */
+
+function pasarTurno(){
+
+    if(turnoActual < jugadores.length - 1){
+
+        turnoActual++;
+
+        renderizar();
+    }
+}
+
+/* ---------- GANADOR ---------- */
+
+function revelarBancaYGanador(){
+
+    document.getElementById("total-banca-txt")
+    .innerText = bancaTotal;
+
+    let ranking = [...jugadores]
+
+    .sort((a,b) => {
+
+        let da =
+        Math.abs(bancaTotal - a.total);
+
+        let db =
+        Math.abs(bancaTotal - b.total);
+
+        return da - db;
+    });
+
+    let ganador = ranking[0];
+
+    let blackjack =
+    ganador.total === bancaTotal;
+
+    let msg =
+`RESULTADOS
+
+BANCA: ${bancaTotal}
+
+GANADOR:
+${ganador.nombre} con ${ganador.total}
+${blackjack ? "BLACKJACK PERFECTO" : ""}
+
+RANKING:
+
+`;
+
+    ranking.forEach((j,index) => {
+
+        let puesto = "";
+
+        if(index === 0) puesto = "Primer puesto";
+        else if(index === 1) puesto = "Segundo puesto";
+        else if(index === 2) puesto = "Tercer puesto";
+        else if(index === 3) puesto = "Cuarto puesto";
+        else if(index === 4) puesto = "Quinto puesto";
+        else puesto = (index+1) + "° puesto";
+
+        msg +=
+`${puesto}: ${j.nombre} — ${j.total}
+
+`;
+    });
+
+    alert(msg);
+}
+
+</script>
+
+</body>
+</html>
